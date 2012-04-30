@@ -2,17 +2,33 @@
 
 RAILS_DIR=/var/www/railsapp
 
-# generate controller
-cd $RAILS_DIR
-ruby script/generate controller --skip cp
+# update Gemfile
+cat >> $RAILS_DIR/Gemfile<<EOF
+gem 'execjs'
+gem 'therubyracer'
+EOF
 
-# configure routing
-sed -i "s|^end|  map.root :controller => \"cp\"\nend|" $RAILS_DIR/config/routes.rb
+cd $RAILS_DIR
+bundle install --local
+
+# generate controller
+rails generate controller cp
+
+# apply railsapp webcp overlay
+cp -TdR ${RAILS_DIR}.overlay ${RAILS_DIR}
+rm -rf ${RAILS_DIR}.overlay
+
+# set asset compilation on-demand
+sed -i "/config.assets.compile/ s/false/true/" $RAILS_DIR/config/environments/production.rb
 
 # configure tkl-webcp
-cp -a /var/www/js/* $RAILS_DIR/public/javascripts
-cp -a /var/www/css/* $RAILS_DIR/public/stylesheets
-cp -a /var/www/images/* $RAILS_DIR/public/images
+rm /var/www/js/jquery-*.js
+sed -i "s|../images/||" /var/www/css/ui.tabs.css
+
+cp -a /var/www/js/* $RAILS_DIR/app/assets/javascripts/
+cp -a /var/www/css/* $RAILS_DIR/app/assets/stylesheets/
+cp -a /var/www/images/* $RAILS_DIR/app/assets/images/
+
 rm -rf /var/www/{js,css,images}
 
 # remove default index
