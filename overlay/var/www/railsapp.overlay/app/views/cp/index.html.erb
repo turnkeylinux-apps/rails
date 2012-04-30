@@ -1,0 +1,54 @@
+<% content_for :posthead do %>
+    <%= stylesheet_link_tag "ui.tabs", :media => "print, screen" %>
+    <%= stylesheet_link_tag "base" %>
+
+    <%= javascript_include_tag "ui.core" %>
+    <%= javascript_include_tag "ui.tabs" %>
+
+    <script type="text/javascript">
+        $(function() {
+            $('#container-1 > ul').tabs({ fx: { opacity: 'toggle'} });
+        });
+    </script>
+<% end %>
+
+<h1>TurnKey Rails</h1>
+
+<div id="container-1">
+    <ul>
+        <li><a href="#cp"><span>Control Panel</span></a></li>
+    </ul>
+
+    <div id="cp">
+        <div class="fragment-content">
+            <div>
+                <a href="https://<%= @http_host %>:12320">
+                <%= image_tag "shell.png" %>Web Shell</a>
+            </div>
+            <div>
+                <a href="https://<%= @http_host %>:12321">
+                <%= image_tag "webmin.png" %>Webmin</a>
+            </div>
+            <div></div>
+            <div></div>
+            <div></div>
+
+            <h2>Resources and references</h2>
+            <ul>
+                <li>Show, don't tell: Watch the
+                <a href="http://rubyonrails.org/screencasts"> screencasts
+                and presentations</a></li>
+
+                <li>Check out the Ruby on Rails 
+                <a href="http://rubyonrails.org/">website</a>, 
+                <a href="http://wiki.rubyonrails.org/">wiki</a> and the
+                <a href="http://rubyonrails.org/documentation">
+                documentation</a></li>
+
+                <li><a href="http://www.turnkeylinux.org/rails">
+                TurnKey Rails release notes</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
