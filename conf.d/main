@@ -1,35 +1,36 @@
 #!/bin/bash -ex
 
-RAILS_DIR=/var/www/railsapp
+WEBROOT=/var/www/rails
 
 # update Gemfile
-cat >> $RAILS_DIR/Gemfile<<EOF
+cat >> $WEBROOT/Gemfile<<EOF
 gem 'execjs'
 gem 'therubyracer'
 EOF
 
-cd $RAILS_DIR
+cd $WEBROOT
 bundle install --local
 
 # generate controller
 rails generate controller cp
 
 # apply railsapp webcp overlay
-cp -TdR ${RAILS_DIR}.overlay ${RAILS_DIR}
-rm -rf ${RAILS_DIR}.overlay
+cp -TdR $WEBROOT.overlay $WEBROOT
+rm -rf $WEBROOT.overlay
 
 # set asset compilation on-demand
-sed -i "/config.assets.compile/ s/false/true/" $RAILS_DIR/config/environments/production.rb
+sed -i "/config.assets.compile/ s/false/true/" $WEBROOT/config/environments/production.rb
 
 # configure tkl-webcp
 rm /var/www/js/jquery-*.js
 sed -i "s|../images/||" /var/www/css/ui.tabs.css
 
-cp -a /var/www/js/* $RAILS_DIR/app/assets/javascripts/
-cp -a /var/www/css/* $RAILS_DIR/app/assets/stylesheets/
-cp -a /var/www/images/* $RAILS_DIR/app/assets/images/
+cp -a /var/www/js/* $WEBROOT/app/assets/javascripts/
+cp -a /var/www/css/* $WEBROOT/app/assets/stylesheets/
+cp -a /var/www/images/* $WEBROOT/app/assets/images/
 
 rm -rf /var/www/{js,css,images}
 
 # remove default index
-rm -f $RAILS_DIR/public/index.html
+rm -f $WEBROOT/public/index.html
+
