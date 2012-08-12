@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-WEBROOT=/var/www/rails
+WEBROOT=/var/www/railsapp
 
 # update Gemfile
 cat >> $WEBROOT/Gemfile<<EOF
