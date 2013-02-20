@@ -2,17 +2,18 @@
 
 WEBROOT=/var/www/railsapp
 
-# update Gemfile
+# update gemfile
 cat >> $WEBROOT/Gemfile<<EOF
 gem 'execjs'
 gem 'therubyracer'
 EOF
 
+# install bundle and generate controller
+[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 cd $WEBROOT
-bundle install --local
-
-# generate controller
+bundle install
 rails generate controller cp
+unset HTTP_PROXY
 
 # apply railsapp webcp overlay
 cp -TdR $WEBROOT.overlay $WEBROOT
@@ -22,7 +23,6 @@ rm -rf $WEBROOT.overlay
 sed -i "/config.assets.compile/ s/false/true/" $WEBROOT/config/environments/production.rb
 
 # configure tkl-webcp
-rm /var/www/js/jquery-*.js
 sed -i "s|../images/||" /var/www/css/ui.tabs.css
 
 cp -a /var/www/js/* $WEBROOT/app/assets/javascripts/

@@ -1,4 +1,4 @@
-COMMON_OVERLAYS = rails-gems tkl-webcp
+COMMON_OVERLAYS = tkl-webcp
 COMMON_CONF = tkl-webcp
 
 include $(FAB_PATH)/common/mk/turnkey/rails.mk
