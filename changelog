@@ -5,7 +5,7 @@ turnkey-rails-12.1 (1) turnkey; urgency=low
     - Latest version of Rails and gems will be installed at build time.
     - Added execjs and therubyracer gems (LP#1084235).
 
-  * Hardcoded component versions:
+  * Upstream source component versions:
 
     rubyenterprise      1.8.7-2012.02_i386_ubuntu10.04
                         1.8.7-2012.02_amd64_debian6
