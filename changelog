@@ -1,3 +1,9 @@
+turnkey-rails-13.0 (2) turnkey; urgency=low
+
+  * Regenerate Rails 4 hardwired secret in /var/www/railsapp
+
+ -- Liraz Siri <alon@turnkeylinux.org>  Fri, 20 Jun 2014 11:22:43 +0300
+
 turnkey-rails-13.0 (1) turnkey; urgency=low
 
   * Rails:
