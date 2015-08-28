@@ -1,3 +1,14 @@
+turnkey-rails-14.0 (1) turnkey; urgency=low
+
+  * Latest upstream version of Rails and gems.
+
+  * Bugfix for log permissions issue [#235].
+
+  * Note: Please refer to turnkey-core's changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Anton Pyrogovskyi <anton@turnkeylinux.org>  Fri, 28 Aug 2015 11:51:43 +0300
+
 turnkey-rails-13.0 (2) turnkey; urgency=low
 
   * Regenerate Rails 4 hardwired secret in /var/www/railsapp
