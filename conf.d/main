@@ -6,7 +6,6 @@ LOGDIR=/var/log/railsapp
 # update gemfile
 cat >> $WEBROOT/Gemfile<<EOF
 gem 'execjs'
-gem 'therubyracer'
 EOF
 
 # install bundle and generate controller
