@@ -44,6 +44,6 @@ Credentials *(passwords set at first boot)*
 
 
 .. _Ruby on Rails: http://rubyonrails.org/
-.. _TurnKey Core: http://www.turnkeylinux.org/core
+.. _TurnKey Core: https://www.turnkeylinux.org/core
 .. _Ruby Enterprise: http://www.rubyenterpriseedition.com/
-.. _Ruby on Rails docs: http://www.turnkeylinux.org/docs/rails
+.. _Ruby on Rails docs: https://www.turnkeylinux.org/docs/rails
