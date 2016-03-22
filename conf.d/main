@@ -32,6 +32,14 @@ cp -a /var/www/js/* $WEBROOT/app/assets/javascripts/
 cp -a /var/www/css/* $WEBROOT/app/assets/stylesheets/
 cp -a /var/www/images/* $WEBROOT/app/assets/images/
 
+# pre-compile webcp assests
+cat >> $WEBROOT/config/initializers/assets.rb <<EOF
+Rails.application.config.assets.precompile += %w( ui.tabs.css )
+Rails.application.config.assets.precompile += %w( base.css )
+Rails.application.config.assets.precompile += %w( ui.core.js )
+Rails.application.config.assets.precompile += %w( ui.tabs.js )
+EOF
+
 rm -rf /var/www/{js,css,images}
 
 # remove default index
