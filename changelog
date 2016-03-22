@@ -1,5 +1,9 @@
 turnkey-rails-14.1 (1) turnkey; urgency=low
 
+  * Improved regen-rails-secrets inithook [#591].
+
+  * Fixed broken example app by pre-compiling webcp assests [#593].
+
   * Installed security updates.
 
   * Installed updated packages from TurnKey repo
