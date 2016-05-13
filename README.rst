@@ -12,13 +12,11 @@ and on top of that:
 
 - SSL support out of the box.
 - Webmin modules for configuring Apache2, and MySQL.
-- Uses `Ruby Enterprise`_ for improved performance and memory
-  utilization.
 - Ruby on Rails configuration:
    
    - Deployment via Phusion Passenger for Apache (mod\_rails)
    - Preconfigured example Rails application located at
-     */var/www/rails*
+     */var/www/railsapp*
    - MySQL databases setup for production, development and testing.
 
 - RubyGems package manager installed from upstream tarball
@@ -45,5 +43,4 @@ Credentials *(passwords set at first boot)*
 
 .. _Ruby on Rails: http://rubyonrails.org/
 .. _TurnKey Core: https://www.turnkeylinux.org/core
-.. _Ruby Enterprise: http://www.rubyenterpriseedition.com/
 .. _Ruby on Rails docs: https://www.turnkeylinux.org/docs/rails
