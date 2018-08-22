@@ -15,6 +15,7 @@ cd $WEBROOT
 bundle install
 rails generate controller cp # touches development.log
 chown -R www-data:www-data $LOGDIR
+chown -R www-data:www-data $WEBROOT/log
 unset HTTP_PROXY
 service mysql stop
 
