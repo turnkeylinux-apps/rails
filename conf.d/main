@@ -9,14 +9,14 @@ gem 'execjs'
 EOF
 
 # install bundle and generate controller
-/etc/init.d/mysql start
+service mysql start
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 cd $WEBROOT
 bundle install
 rails generate controller cp # touches development.log
 chown -R www-data:www-data $LOGDIR
 unset HTTP_PROXY
-/etc/init.d/mysql stop
+service mysql stop
 
 # apply railsapp webcp overlay
 cp -TdR $WEBROOT.overlay $WEBROOT
