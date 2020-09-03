@@ -2,14 +2,6 @@
     <%= stylesheet_link_tag "ui.tabs", :media => "print, screen" %>
     <%= stylesheet_link_tag "base" %>
 
-    <%= javascript_include_tag "ui.core" %>
-    <%= javascript_include_tag "ui.tabs" %>
-
-    <script type="text/javascript">
-        $(function() {
-            $('#container-1 > ul').tabs({ fx: { opacity: 'toggle'} });
-        });
-    </script>
 <% end %>
 
 <h1>TurnKey Rails</h1>
@@ -55,3 +47,4 @@
     </div>
 </div>
 
+<%= javascript_pack_tag "tkl-webcp" %>

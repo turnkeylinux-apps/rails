@@ -1,5 +1,4 @@
 #!/bin/bash -ex
-
 WEBROOT=/var/www/railsapp
 LOGDIR=/var/log/railsapp
 
@@ -12,6 +11,7 @@ EOF
 service mysql start
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 cd $WEBROOT
+
 bundle install
 rails generate controller cp # touches development.log
 chown -R www-data:www-data $LOGDIR
@@ -25,22 +25,25 @@ service mysql stop
 cp -TdR $WEBROOT.overlay $WEBROOT
 rm -rf $WEBROOT.overlay
 
-# set asset compilation on-demand
-sed -i "/config.assets.compile/ s/false/true/" $WEBROOT/config/environments/production.rb
-
 # configure tkl-webcp
 sed -i "s|../images/||" /var/www/css/ui.tabs.css
 
-cp -a /var/www/js/* $WEBROOT/app/assets/javascripts/
+cp -a /var/www/js/* $WEBROOT/app/javascript/packs/
 cp -a /var/www/css/* $WEBROOT/app/assets/stylesheets/
 cp -a /var/www/images/* $WEBROOT/app/assets/images/
+
+cat >> $WEBROOT/app/javascript/tkl-webcp.js <<EOF
+require("packs/ui.core.js")
+require("packs/ui.tabs.js")
+$(function() {
+    $('#container-1 > ul').tabs({ fx: { opacity: 'toggle'} });
+});
+EOF
 
 # pre-compile webcp assests
 cat >> $WEBROOT/config/initializers/assets.rb <<EOF
 Rails.application.config.assets.precompile += %w( ui.tabs.css )
 Rails.application.config.assets.precompile += %w( base.css )
-Rails.application.config.assets.precompile += %w( ui.core.js )
-Rails.application.config.assets.precompile += %w( ui.tabs.js )
 EOF
 
 rm -rf /var/www/{js,css,images}
