@@ -26,28 +26,31 @@ cp -TdR $WEBROOT.overlay $WEBROOT
 rm -rf $WEBROOT.overlay
 
 # configure tkl-webcp
-sed -i "s|../images/||" /var/www/css/ui.tabs.css
 
+mkdir $WEBROOT/app/javascript/images
 cp -a /var/www/js/* $WEBROOT/app/javascript/packs/
-cp -a /var/www/css/* $WEBROOT/app/assets/stylesheets/
-cp -a /var/www/images/* $WEBROOT/app/assets/images/
+cp -a /var/www/css/* $WEBROOT/app/javascript/stylesheets/
+cp -a /var/www/images/* $WEBROOT/app/javascript/images/
 
-cat >> $WEBROOT/app/javascript/tkl-webcp.js <<EOF
-require("packs/ui.core.js")
-require("packs/ui.tabs.js")
-$(function() {
-    $('#container-1 > ul').tabs({ fx: { opacity: 'toggle'} });
-});
-EOF
+# Webpacker breaks with dot in filename, rename to use hyphen
 
-# pre-compile webcp assests
-cat >> $WEBROOT/config/initializers/assets.rb <<EOF
-Rails.application.config.assets.precompile += %w( ui.tabs.css )
-Rails.application.config.assets.precompile += %w( base.css )
-EOF
+cd $WEBROOT/app/javascript/stylesheets
+mv ui.core.css ui-core.scss
+
+# remove the line containing loading.gif for absence of the file and rename to scss.
+grep -v "loading.gif" ui.tabs.css > ui-tabs.scss
+
+cd $WEBROOT/app/javascript/packs
+
+mv jquery*.js jquery.js
+mv ui.tabs.js ui-tabs.js
+mv ui.core.js ui-core.js
 
 rm -rf /var/www/{js,css,images}
 
+
 # remove default index
 rm -f $WEBROOT/public/index.html
-
+break
+oput
+qafaf
