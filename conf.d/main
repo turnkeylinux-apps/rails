@@ -46,7 +46,8 @@ mv ui.core.js ui-core.js
 
 rm -rf /var/www/{js,css,images}
 
-
 # remove default index
 rm -f $WEBROOT/public/index.html
+
+RAILS_ENV=production bundle exec rake assets:precompile
 
