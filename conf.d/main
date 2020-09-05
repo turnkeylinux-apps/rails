@@ -51,6 +51,3 @@ rm -rf /var/www/{js,css,images}
 
 # remove default index
 rm -f $WEBROOT/public/index.html
-break
-oput
-qafaf
