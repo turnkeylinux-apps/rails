@@ -1,3 +1,12 @@
+turnkey-rails-16.1 (1) turnkey; urgency=low
+
+  * Rebuild on latest Debian Buster.
+
+  * Note: Please refer to turnkey-core's 16.1 changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Stefan Davis <stefan@turnkeylinux.org>  Wed, 28 Apr 2021 00:26:45 +1000
+
 turnkey-rails-16.0 (1) turnkey; urgency=low
 
   * Update to latest stable Ruby on Rails - v6.0.3.3.
