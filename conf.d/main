@@ -50,9 +50,10 @@ cp -a /var/www/images/* $WEBROOT/app/javascript/images/
 # Webpacker breaks with dot in filename, rename webcp files to use hyphen
 cd $WEBROOT/app/javascript/stylesheets
 
-mv base.css base.scss
-# remove the line containing loading.gif for absence of the file and rename to scss.
-grep -v "loading.gif" ui.tabs.css > ui-tabs.scss
+# remove the line containing loading.gif for absence of the file and rename
+grep -v "loading.gif" ui.tabs.css >> ui-tabs.css
+rm ui.tabs.css
+cat base.css ui-tabs.css > tkl-webcp.css
 
 cd $WEBROOT/app/javascript/packs
 
@@ -60,6 +61,8 @@ mv ui.tabs.js ui-tabs.js
 mv ui.core.js ui-core.js
 
 rm -rf /var/www/{js,css,images}
+
+mv $WEBROOT/app/javascript/application.js $WEBROOT/app/javascript/packs/
 
 # remove default index
 rm -f $WEBROOT/public/index.html
