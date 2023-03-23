@@ -9,7 +9,9 @@ EOF
 
 # install bundle and generate controller
 service mysql start
-[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
+# getting yarn "self-signed certificate errors" with the proxy enabled...
+#[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
+unset HTTP_PROXY http_proxy # just in case it's set somewhere else
 cd $WEBROOT
 
 bundle install
@@ -71,4 +73,3 @@ rm -f $WEBROOT/public/index.html
 sed -i '/stimulus-loading/s|^|// |' $WEBROOT/app/javascript/controllers/index.js
 
 RAILS_ENV=production bundle exec rake assets:precompile
-
