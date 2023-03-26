@@ -44,7 +44,7 @@ rm -rf $WEBROOT.overlay
 
 # configure tkl-webcp
 
-mkdir $WEBROOT/app/javascript/images
+mkdir $WEBROOT/app/javascript/{images,stylesheets}
 cp -a /var/www/js/ui* $WEBROOT/app/javascript/packs/
 cp -a /var/www/css/* $WEBROOT/app/javascript/stylesheets/
 cp -a /var/www/images/* $WEBROOT/app/javascript/images/
