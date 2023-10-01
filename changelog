@@ -5,9 +5,6 @@ turnkey-rails-18.0 (1) turnkey; urgency=low
   * Updated all Debian packages to latest.
     [ autopatched by buildtasks ]
 
-  * Patched bugfix release. Closes #1734.
-    [ autopatched by buildtasks ]
-
  -- Zhenya Khvorostian <zhenya@turnkeylinux.org>  Sat, 01 Oct 2023 10:15:20 +0000
 
 turnkey-rails-17.1 (1) turnkey; urgency=low
