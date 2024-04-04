@@ -17,7 +17,7 @@ cd $WEBROOT
 bundle install
 bundle add shakapacker --strict
 rails webpacker:install
-sed -i 's/\(source_entry_path:\).*$/\1 packs/' config/webpacker.yml
+sed -i 's/\(source_entry_path:\).*$/\1 packs/' config/shakapacker.yml
 yarn add css-loader style-loader mini-css-extract-plugin css-minimizer-webpack-plugin @hotwired/turbo-rails @hotwired/stimulus
 rails generate controller cp # touches development.log
 chown -R www-data:www-data $LOGDIR
