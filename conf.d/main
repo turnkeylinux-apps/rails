@@ -79,4 +79,4 @@ sed -i '/stimulus-loading/s|^|// |' $WEBROOT/app/javascript/controllers/index.js
 RAILS_ENV=production bundle exec rake assets:precompile
 
 # restore origin wgetrc if it exists
-mv /root/.wgetrc.orig /root/.wgetrc || true
+mv /root/.wgetrc.orig /root/.wgetrc || rm -f /root/.wgetrc
