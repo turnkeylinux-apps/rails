@@ -14,6 +14,10 @@ service mysql start
 unset HTTP_PROXY http_proxy # just in case it's set somewhere else
 cd $WEBROOT
 
+# workaround weird bug where bundle fails on IPv6 addresses
+# wgetrc file shouldn't exist by default, but just in case
+mv /root/.wgetrc /root/.wgetrc.orig || true
+echo 'inet4_only = on' > /root/.wgetrc
 bundle install
 bundle add shakapacker --strict
 rails webpacker:install
@@ -73,3 +77,6 @@ rm -f $WEBROOT/public/index.html
 sed -i '/stimulus-loading/s|^|// |' $WEBROOT/app/javascript/controllers/index.js
 
 RAILS_ENV=production bundle exec rake assets:precompile
+
+# restore origin wgetrc if it exists
+mv /root/.wgetrc.orig /root/.wgetrc || true
