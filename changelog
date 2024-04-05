@@ -3,6 +3,8 @@ turnkey-rails-18.0 (1) turnkey; urgency=low
   * Install Ruby v3.3.0 (via rbenv) & Rails v7.1.3.
     [Zhenya Khvorostian <zhenya@turnkeylinux.org>]
 
+  * Configure bundler to fall back to IPv4 if IPv6 fails.
+
   * Ensure hashfile includes URL to public key - closes #1864.
 
   * Include webmin-logviewer module by default - closes #1866.
