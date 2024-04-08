@@ -14,6 +14,9 @@ service mysql start
 unset HTTP_PROXY http_proxy # just in case it's set somewhere else
 cd $WEBROOT
 
+# ensure that bundler falls back to IPv4 if IPv6 fails
+echo ':ipv4_fallback_enabled: true' >> ~/.gemrc
+
 bundle install
 bundle add shakapacker --strict
 rails webpacker:install
