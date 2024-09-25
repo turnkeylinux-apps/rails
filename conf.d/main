@@ -2,77 +2,38 @@
 WEBROOT=/var/www/railsapp
 LOGDIR=/var/log/railsapp
 
-# update gemfile
-cat >> $WEBROOT/Gemfile<<EOF
-gem 'execjs'
-EOF
-
-# install bundle and generate controller
-service mysql start
-# getting yarn "self-signed certificate errors" with the proxy enabled...
-#[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
-unset HTTP_PROXY http_proxy # just in case it's set somewhere else
-cd $WEBROOT
-
-# ensure that bundler falls back to IPv4 if IPv6 fails
 echo ':ipv4_fallback_enabled: true' >> ~/.gemrc
 
-bundle install
-bundle add shakapacker --strict
-rails webpacker:install
-sed -i 's/\(source_entry_path:\).*$/\1 packs/' config/shakapacker.yml
-yarn add css-loader style-loader mini-css-extract-plugin css-minimizer-webpack-plugin @hotwired/turbo-rails @hotwired/stimulus
-rails generate controller cp # touches development.log
+cd $WEBROOT
+
+rails generate controller cp index
+
+# apply local railsapp post generate overlay
+cp -TdR $WEBROOT.overlay $WEBROOT
+
+# set up routes, controller, views & manifest
+sed -i 's|# root.*|root "cp#index"|' $WEBROOT/config/routes.rb
+sed -Ei 's|(^class CpController.*)|\1\n  layout "main"|' \
+            $WEBROOT/app/controllers/cp_controller.rb
+sed -i '/def index/ s|$|\n    @http_host = request.env["HTTP_HOST"]|' \
+            $WEBROOT/app/controllers/cp_controller.rb
+echo "//= link_tree ../images .png" >> $WEBROOT/app/assets/config/manifest.js
+
+# set up assests
+cp $WEBROOT/../js/ui*.js $WEBROOT/app/javascript/
+cp $WEBROOT/../images/{webmin.png,tab.png} $WEBROOT/app/assets/images/
+cat $WEBROOT/../css/*.css > $WEBROOT/app/assets/stylesheets/tkl-webcp.css
+cp $WEBROOT/../images/{webmin.png,tab.png} $WEBROOT/app/assets/images/
+sed -i '/tab.png/ s|url(.*tab.png)|url(tab.png)|' \
+            $WEBROOT/app/assets/stylesheets/tkl-webcp.css
+
+# cleanup unneeded files
+rm -rf $WEBROOT/../{js,images,css} $WEBROOT.overlay
+rails tmp:clear
+
 chown -R www-data:www-data $LOGDIR
 chown -R www-data:www-data $WEBROOT/log
 chown -R www-data:www-data $WEBROOT/tmp/cache
 chmod g+r $WEBROOT/config/master.key
-unset HTTP_PROXY
-service mysql stop
-
-cat > config/webpack/webpack.config.js <<EOF
-const { webpackConfig, merge } = require('shakapacker')
-const customConfig = {
-  resolve: {
-    extensions: ['.css']
-  }
-}
-
-module.exports = merge(webpackConfig, customConfig)
-EOF
-
-# apply railsapp webcp overlay
-cp -TdR $WEBROOT.overlay $WEBROOT
-rm -rf $WEBROOT.overlay
-
-# configure tkl-webcp
-
-mkdir $WEBROOT/app/javascript/{images,stylesheets}
-cp -a /var/www/js/ui* $WEBROOT/app/javascript/packs/
-cp -a /var/www/css/* $WEBROOT/app/javascript/stylesheets/
-cp -a /var/www/images/* $WEBROOT/app/javascript/images/
-
-# Webpacker breaks with dot in filename, rename webcp files to use hyphen
-cd $WEBROOT/app/javascript/stylesheets
-
-# remove the line containing loading.gif for absence of the file and rename
-grep -v "loading.gif" ui.tabs.css >> ui-tabs.css
-rm ui.tabs.css
-cat base.css ui-tabs.css > tkl-webcp.css
-
-cd $WEBROOT/app/javascript/packs
-
-mv ui.tabs.js ui-tabs.js
-mv ui.core.js ui-core.js
-
-rm -rf /var/www/{js,css,images}
-
-mv $WEBROOT/app/javascript/application.js $WEBROOT/app/javascript/packs/
-
-# remove default index
-rm -f $WEBROOT/public/index.html
-
-# remove stimulus-loading import (unneeded with webpack)
-sed -i '/stimulus-loading/s|^|// |' $WEBROOT/app/javascript/controllers/index.js
 
 RAILS_ENV=production bundle exec rake assets:precompile
