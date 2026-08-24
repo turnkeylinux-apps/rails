@@ -84,8 +84,11 @@ production:
   database: railsapp_production
 EOF
 
+mv "$WEBROOT/log" "$LOGDIR"
+ln -s "$LOGDIR" "$WEBROOT/log"
+
 chown -R root:www-data "$WEBROOT"
-chown -R www-data:www-data "$LOGDIR" "$WEBROOT/log" "$WEBROOT/tmp" \
+chown -R www-data:www-data "$LOGDIR" "$WEBROOT/tmp" \
     "$WEBROOT/storage"
 chmod 0640 "$WEBROOT/config/master.key"
 
