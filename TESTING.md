@@ -47,6 +47,28 @@ the refresh does not mutate installed versions and that no Bookworm source
 remains. The sample application runs `bundle check` against its locally
 resolved lock file.
 
+## Accepted run
+
+Run `20260824t101906z-4198-31522` passed on 2026-08-24 from source commit
+`61748a401248aa63a231a117f0a79fee9622ce85` with harness commit
+`b6f8b8c2f3e8f00fd5cf36869e645fc08f01f87e`. The report is retained at:
+
+```text
+/home/agent/.local/state/turnkey-v19-harness/runs/rails/20260824t101906z-4198-31522/report.txt
+```
+
+The report SHA-256 is
+`3b49b35f69d0b607b14bc17dd069035eb5cf617bee944c7b8ffa95f41f88b77f`.
+The build, image import, normal boot, runtime tests and cleanup all passed. The
+runtime result records Rails 7.2.2.2, Ruby 3.3.8, Passenger 6.0.26, MariaDB
+11.8.6, Apache 2.4.68 and Node.js 20.19.2. It also records successful HTTP and
+HTTPS application requests, Webmin access, the Rails database roundtrip,
+credential regeneration and the APT updater check.
+
+This accepted source commit contains all appliance and executable test changes.
+The following commit records this run in the documentation only, so another
+rootfs build is not required for that evidence-only change.
+
 ## Known limitation
 
 Docker acceptance does not exercise the installer, kernel, bootloader or
@@ -55,4 +77,12 @@ Core 19 baseline supplies that inherited evidence.
 
 ## Deferred minor issues
 
-None recorded before the main acceptance run.
+- Running Rails commands explicitly as `www-data` prints a Bundler warning
+  because `/var/www` is not writable and Bundler uses a temporary home. The
+  production application and database roundtrip pass. Normal development
+  commands run as `root`, so this is not prioritized for v19.0.
+- `passenger-status` cannot open its administrative socket when the harness
+  creates a path longer than the Linux Unix-socket limit. The accepted test
+  instead proves Passenger through the loaded Apache module, successful
+  application responses and Passenger response header. Normal appliance paths
+  are shorter, so no appliance change is planned.
