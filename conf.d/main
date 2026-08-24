@@ -93,6 +93,7 @@ chown -R www-data:www-data "$LOGDIR" "$WEBROOT/tmp" \
 chmod 0640 "$WEBROOT/config/master.key"
 
 a2enmod passenger rewrite
+a2enconf railsapp-passenger
 a2dissite 000-default
 a2ensite railsapp
 apache2ctl configtest
