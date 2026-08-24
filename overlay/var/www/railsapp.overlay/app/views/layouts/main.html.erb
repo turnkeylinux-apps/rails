@@ -4,10 +4,7 @@
     <title>TurnKey Rails</title>
     <%= yield :prehead %>
 
-    <%= stylesheet_link_tag "application", :media => "all" %>
-    <%= javascript_importmap_tags "application" %>
-
-    <%= javascript_include_tag "jquery", "ui.core", "ui.tabs", "tkl-webcp", 'data-turbolinks-track': 'reload' %>
+    <link rel="stylesheet" href="/tkl-webcp.css">
 
     <%= csrf_meta_tags %>
 

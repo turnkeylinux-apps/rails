@@ -1,5 +1,5 @@
-COMMON_OVERLAYS = tkl-webcp
-COMMON_CONF = nodejs tkl-webcp
+COMMON_OVERLAYS = mysql tkl-webcp
+COMMON_CONF = tkl-webcp
 
-include $(FAB_PATH)/common/mk/turnkey/rails.mk
+include $(FAB_PATH)/common/mk/turnkey/apache.mk
 include $(FAB_PATH)/common/mk/turnkey.mk
