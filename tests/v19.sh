@@ -44,8 +44,9 @@ grep -q '^    mysql2 (0\.5\.' "$webroot/Gemfile.lock"
 (cd "$webroot" && bundle check)
 
 apache2ctl -M 2>/dev/null | grep -q ' passenger_module '
-curl --silent --show-error --output /dev/null \
-    --write-out '%{http_code}' http://127.0.0.1/ | grep -Fxq 301
+curl --location --insecure --fail --silent --show-error \
+    http://127.0.0.1/ >"$response"
+grep -q 'TurnKey Rails' "$response"
 curl --insecure --fail --silent --show-error https://127.0.0.1/ >"$response"
 grep -q 'TurnKey Rails' "$response"
 grep -q 'https://127.0.0.1:12321' "$response"
@@ -112,7 +113,7 @@ grep -Rqs '^Suites: trixie' /etc/apt/sources.list.d
 cat >"$result" <<EOF
 package_source=Debian 13 Trixie APT repositories for Ruby, Rails, Passenger, MariaDB, Apache and Node.js; TurnKey APT for Webmin modules
 installed_version=rails $rails_package ($rails_version); ruby $ruby_package ($ruby_version); passenger $passenger_package; mariadb-server $mariadb_package; apache2 $apache_package; nodejs $node_package ($node_version)
-runtime_checks=normal init; Apache and MariaDB service supervision; Rails production app through HTTPS Passenger; HTTP redirect; Webmin link and endpoint; production database write/read/delete roundtrip; development and test databases; regenerated Rails credentials
+runtime_checks=normal init; Apache and MariaDB service supervision; Rails production app through HTTP entry and HTTPS Passenger; Webmin link and endpoint; production database write/read/delete roundtrip; development and test databases; regenerated Rails credentials
 updater_command=apt-get update; apt-cache policy rails ruby libapache2-mod-passenger mariadb-server apache2 nodejs
 updater_result=signed metadata refreshed; eligible Trixie candidates found; installed versions unchanged
 updater_channel=Debian Trixie and TurnKey Trixie APT repositories

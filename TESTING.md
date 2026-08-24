@@ -29,7 +29,7 @@ result, cleanup status and verdict.
 
 | README contract | Focused check | Required result |
 | --- | --- | --- |
-| Rails sample application at `/var/www/railsapp` | Request HTTP and HTTPS through Apache, inspect Passenger status and the response | HTTP redirects to HTTPS; Passenger runs the production app; the page identifies TurnKey Rails |
+| Rails sample application at `/var/www/railsapp` | Request the HTTP entry path and HTTPS through Apache, inspect Passenger status and the response | Both paths reach the production app; Passenger runs it; the page identifies TurnKey Rails |
 | Ruby 3.3 and Rails 7.2 come from Debian | Query commands, packages and binary ownership | Versions match the Trixie packages and `/usr/local/rbenv` is absent |
 | Apache Passenger deployment | Inspect loaded modules, response headers and Passenger process state | Apache loads Passenger, the response identifies Passenger and a production app process is active |
 | MariaDB production, development and test databases | Check all database names, then write, read and delete a temporary production row through Rails as `www-data` | All three databases exist and the application roundtrip succeeds |
