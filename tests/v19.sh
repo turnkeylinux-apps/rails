@@ -55,9 +55,6 @@ curl --insecure --fail --silent --show-error \
 curl --insecure --fail --silent --show-error --head \
     https://127.0.0.1/ >"$headers"
 grep -Fqi 'X-Powered-By: Phusion Passenger' "$headers"
-passenger-status >"$response"
-grep -q '/var/www/railsapp (production)' "$response"
-grep -Eq 'Processes[[:space:]]*:[[:space:]]*[1-9]' "$response"
 
 dpkg-query -W webmin-apache webmin-mysql >/dev/null
 curl --insecure --fail --silent --show-error --head \

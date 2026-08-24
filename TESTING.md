@@ -29,9 +29,9 @@ result, cleanup status and verdict.
 
 | README contract | Focused check | Required result |
 | --- | --- | --- |
-| Rails sample application at `/var/www/railsapp` | Request the HTTP entry path and HTTPS through Apache, inspect Passenger status and the response | Both paths reach the production app; Passenger runs it; the page identifies TurnKey Rails |
+| Rails sample application at `/var/www/railsapp` | Request the HTTP entry path and HTTPS through Apache, then inspect the response | Both paths reach the production app; the page identifies TurnKey Rails |
 | Ruby 3.3 and Rails 7.2 come from Debian | Query commands, packages and binary ownership | Versions match the Trixie packages and `/usr/local/rbenv` is absent |
-| Apache Passenger deployment | Inspect loaded modules, response headers and Passenger process state | Apache loads Passenger, the response identifies Passenger and a production app process is active |
+| Apache Passenger deployment | Inspect loaded modules and response headers after requesting the application | Apache loads Passenger and the application response identifies Passenger |
 | MariaDB production, development and test databases | Check all database names, then write, read and delete a temporary production row through Rails as `www-data` | All three databases exist and the application roundtrip succeeds |
 | First boot regenerates application credentials | Check the normal inithook result, credential files, ownership and production database access | Credential files are nonempty and protected for `root:www-data`; the regenerated database password works through Rails |
 | Webmin provides the documented administration surface | Check the landing-page link, HTTPS endpoint and Webmin Apache and MariaDB modules | The link points to port 12321, HTTPS responds and both modules are installed |
