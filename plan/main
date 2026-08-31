@@ -1,4 +1,15 @@
 #include <turnkey/base>
-#include <turnkey/rails>
+#include <turnkey/mysql>
 
-git-core
+apache2
+webmin-apache
+libapache2-mod-passenger
+libapache2-mod-security2
+libapache2-mod-evasive
+
+rails
+ruby-mysql2
+nodejs
+
+build-essential
+default-libmysqlclient-dev

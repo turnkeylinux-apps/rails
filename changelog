@@ -1,3 +1,19 @@
+turnkey-rails-19.0 (1) turnkey; urgency=low
+
+  * Rebuild on Debian 13 Trixie.
+
+  * Use Debian packages for Ruby 3.3, Rails 7.2 and Phusion Passenger 6.
+
+  * Generate the example application from the packaged Rails stack and lock
+    its dependencies from locally installed Debian gems.
+
+  * Update the Apache Passenger integration and retain MariaDB production,
+    development and test databases.
+
+  * Refresh the example landing page and first-boot Rails credential rotation.
+
+ -- TurnKey GNU/Linux Team <admin@turnkeylinux.org>  Mon, 24 Aug 2026 08:35:00 +0000
+
 turnkey-rails-18.1 (1) turnkey; urgency=low
 
   * v18.1 rebuild - includes latest Debian & TurnKey packages.

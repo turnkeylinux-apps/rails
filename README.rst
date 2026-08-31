@@ -13,34 +13,38 @@ and on top of that:
 - SSL support out of the box.
 - Webmin modules for configuring Apache2, and MySQL.
 - Ruby on Rails configuration:
-   
-   - Deployment via Phusion Passenger for Apache (mod\_rails)
+
+   - Ruby 3.3 and Rails 7.2 from Debian 13 packages.
+   - Deployment through Phusion Passenger for Apache.
    - Preconfigured example Rails application located at
      */var/www/railsapp*
-   - MySQL databases setup for production, development and testing.
+   - MariaDB databases and an application user configured for production,
+     development and testing.
+   - Node.js 20 and essential build packages for application development.
 
-- RubyGems package manager installed from upstream tarball
-   
-   - APT and RubyGems are both package management systems and may
-     potentially conflict.
-   - We recommend using RubyGems for managing Rails components (called
-     gems), and APT for everything else.
-   - Essential build packages (build-essentials) are included to aid in
-     building gems.
+- Rails, Ruby, Passenger and the sample application's gems are maintained by
+  Debian APT packages. The sample application's Bundler lock is generated from
+  those locally installed packages.
 
-Upgrading RubyGems itself and Rails components (gems)::
+Updating the packaged Rails stack::
 
-    gem update --system
-    gem update
+    apt update
+    apt full-upgrade
+
+Application-specific gems added by a developer continue to use Bundler from
+the application directory.
 
 See the `Ruby on Rails docs`_ for further details.
 
 Credentials *(passwords set at first boot)*
 -------------------------------------------
 
--  Webmin, SSH, and MySQL: username **root**
+- Webmin and SSH: username **root**
+
+The generated MariaDB application credential is stored in
+*/var/www/railsapp/config/database.yml* and is regenerated during first boot.
 
 
-.. _Ruby on Rails: http://rubyonrails.org/
+.. _Ruby on Rails: https://rubyonrails.org/
 .. _TurnKey Core: https://www.turnkeylinux.org/core
 .. _Ruby on Rails docs: https://www.turnkeylinux.org/docs/rails

@@ -1,39 +1,101 @@
 #!/bin/bash -ex
 WEBROOT=/var/www/railsapp
 LOGDIR=/var/log/railsapp
+DB_USER=railsapp
+DB_PASS=$(mcookie)
 
-echo ':ipv4_fallback_enabled: true' >> ~/.gemrc
+systemctl start mariadb
 
-cd $WEBROOT
+for environment in test development production; do
+    database="railsapp_${environment}"
+    mariadb --batch <<EOF
+CREATE DATABASE \`$database\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';
+GRANT ALL PRIVILEGES ON \`$database\`.* TO '$DB_USER'@'localhost';
+FLUSH PRIVILEGES;
+EOF
+done
+
+cd /var/www
+rails new railsapp -d mysql --skip-bundle --skip-git --skip-docker \
+    --skip-javascript --skip-hotwire --skip-jbuilder --skip-dev-gems \
+    --skip-test --skip-system-test --skip-brakeman --skip-rubocop
+
+cd "$WEBROOT"
+
+cat > Gemfile <<'EOF'
+source "https://rubygems.org"
+
+gem "rails", "~> 7.2.2", ">= 7.2.2.2"
+gem "mysql2", "~> 0.5"
+gem "puma", ">= 5.0"
+gem "bootsnap", require: false
+EOF
+
+# Resolve exclusively against the gems supplied by Debian packages.
+bundle lock --local
+bundle check
+
+# Rails 7.2 leaves asset settings behind when the asset pipeline is skipped.
+rm -f config/initializers/assets.rb
+sed -i '/config\.assets/d' config/environments/*.rb
 
 rails generate controller cp index
 
 # apply local railsapp post generate overlay
-cp -TdR $WEBROOT.overlay $WEBROOT
+cp -TdR "$WEBROOT.overlay" "$WEBROOT"
 
-# set up routes, controller, views & manifest
+# set up routes, controller and views
 sed -i 's|# root.*|root "cp#index"|' $WEBROOT/config/routes.rb
 sed -Ei 's|(^class CpController.*)|\1\n  layout "main"|' \
             $WEBROOT/app/controllers/cp_controller.rb
-sed -i '/def index/ s|$|\n    @http_host = request.env["HTTP_HOST"]|' \
+sed -i '/def index/ s|$|\n    @http_host = request.host|' \
             $WEBROOT/app/controllers/cp_controller.rb
-echo "//= link_tree ../images .png" >> $WEBROOT/app/assets/config/manifest.js
 
-# set up assests
-cp $WEBROOT/../js/ui*.js $WEBROOT/app/javascript/
-cp $WEBROOT/../images/{webmin.png,tab.png} $WEBROOT/app/assets/images/
-cat $WEBROOT/../css/*.css > $WEBROOT/app/assets/stylesheets/tkl-webcp.css
-cp $WEBROOT/../images/{webmin.png,tab.png} $WEBROOT/app/assets/images/
+# publish the control-panel assets without an application gem dependency
+cat $WEBROOT/../css/*.css > $WEBROOT/public/tkl-webcp.css
+cp $WEBROOT/../images/webmin.png $WEBROOT/public/
 sed -i '/tab.png/ s|url(.*tab.png)|url(tab.png)|' \
-            $WEBROOT/app/assets/stylesheets/tkl-webcp.css
+            $WEBROOT/public/tkl-webcp.css
 
 # cleanup unneeded files
-rm -rf $WEBROOT/../{js,images,css} $WEBROOT.overlay
+rm -rf $WEBROOT/../{js,images,css} "$WEBROOT.overlay"
 rails tmp:clear
 
-chown -R www-data:www-data $LOGDIR
-chown -R www-data:www-data $WEBROOT/log
-chown -R www-data:www-data $WEBROOT/tmp/cache
-chmod g+r $WEBROOT/config/master.key
+cat > "$WEBROOT/config/database.yml" <<EOF
+default: &default
+  adapter: mysql2
+  encoding: utf8mb4
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: $DB_USER
+  password: "$DB_PASS"
+  host: localhost
 
-RAILS_ENV=production bundle exec rake assets:precompile
+development:
+  <<: *default
+  database: railsapp_development
+
+test:
+  <<: *default
+  database: railsapp_test
+
+production:
+  <<: *default
+  database: railsapp_production
+EOF
+
+mv "$WEBROOT/log" "$LOGDIR"
+ln -s "$LOGDIR" "$WEBROOT/log"
+
+chown -R root:www-data "$WEBROOT"
+chown -R www-data:www-data "$LOGDIR" "$WEBROOT/tmp" \
+    "$WEBROOT/storage"
+chmod 0640 "$WEBROOT/config/master.key"
+
+a2enmod passenger rewrite
+a2enconf railsapp-passenger
+a2dissite 000-default
+a2ensite railsapp
+apache2ctl configtest
+
+systemctl stop mariadb
