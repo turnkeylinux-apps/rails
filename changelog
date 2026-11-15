@@ -1,5 +1,9 @@
 turnkey-rails-19.0.3 (1) turnkey; urgency=medium
 
+  * Restore first boot after Debian Ruby security updates replace default gems.
+    Reconcile the net-imap lock using installed Debian gems before changing
+    application credentials.
+
   * Connect app email, dynamic DNS and backup setup through the Hub helper.
   * Include the current HubDNS and certificate setup/renewal fixes.
   * Restore backups reliably through Webmin Restore and Advanced options.
