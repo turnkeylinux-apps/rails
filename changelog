@@ -1,16 +1,27 @@
 turnkey-rails-19.0.3 (1) turnkey; urgency=medium
 
-  * Restore first boot after Debian Ruby security updates replace default gems.
-    Reconcile the net-imap lock using installed Debian gems before changing
-    application credentials.
+  * Highlights:
+    - App email delivery: Use TurnKey Hub for application email delivery.
+    - Easier Hub connection: Connect your server more easily to set up email
+      delivery, backups and DNS.
+    - HTTPS and DNS: Fix HubDNS and Let's Encrypt certificate setup and renewal.
+    - Backups: Improve backup and restore reliability in Webmin.
+    - First-boot database setup waits until MariaDB is ready.
+    - Security: Include Debian security updates.
+    - Rails: Fix first boot after Debian Ruby security updates.
 
-  * Connect app email, dynamic DNS and backup setup through the Hub helper.
-  * Include the current HubDNS and certificate setup/renewal fixes.
-  * Restore backups reliably through Webmin Restore and Advanced options.
-  * Complete backups when the Webmin progress window closes.
-  * Run backup simulations locally while preserving interrupted-backup state.
-  * Include the updated Webmin backup setup and Hub approval flow.
-  * Update TKLBAM, Hub helper and console setup/status guidance.
+  * Technical details:
+    - Restore first boot after Debian Ruby security updates replace default gems.
+      Reconcile the net-imap lock using installed Debian gems before changing
+      application credentials.
+
+    - Connect app email, dynamic DNS and backup setup through the Hub helper.
+    - Include the current HubDNS and certificate setup/renewal fixes.
+    - Restore backups reliably through Webmin Restore and Advanced options.
+    - Complete backups when the Webmin progress window closes.
+    - Run backup simulations locally while preserving interrupted-backup state.
+    - Include the updated Webmin backup setup and Hub approval flow.
+    - Update TKLBAM, Hub helper and console setup/status guidance.
 
  -- Liraz Siri <liraz@liraz.org>  Sun, 15 Nov 2026 03:42:09 +0000
 
